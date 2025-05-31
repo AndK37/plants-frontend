@@ -1,8 +1,24 @@
+<script setup>
+import { useStore } from 'vuex';
+
+const store = useStore()
+const props = defineProps({
+    pageItems: Number,
+})
+const nextPage = () => {
+    store.state.page += 1;
+}
+
+const prevPage = () => {
+    store.state.page -= 1;
+}
+</script>
+
 <template>
     <div class="pagination">
-        <button><- Назад</button>
-        <span>1</span>
-        <button>Вперед -></button>
+        <button @click="prevPage" v-bind:class="{disable: store.state.page == 1}"><- Назад</button>
+        <span>{{ store.state.page }}</span>
+        <button @click="nextPage" v-bind:class="{disable: (store.state.page >= (Math.ceil(store.state.contentLength / props.pageItems))) }">Вперед -></button>
     </div>
 </template>
 <style scoped>
@@ -16,6 +32,10 @@ button, span {
 }
 button {
     cursor: pointer;
+}
+.disable {
+    pointer-events: none;
+    opacity: 50%;
 }
 .pagination {
     display: flex;

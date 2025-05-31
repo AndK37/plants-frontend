@@ -1,21 +1,52 @@
 <script setup>
+import { useRouter } from 'vue-router';
 import IconFavorite from './icons/IconFavorite.vue';
+import { defineProps } from 'vue';
+import { useStore } from 'vuex';
+
+const store = useStore()
+const isLogged = JSON.parse(localStorage.getItem('logged'))
+const props = defineProps({
+    id: Number,
+    title: String,
+    desc: String,
+    price: Number,
+    rating: Number,
+    seller: String,
+    imageUrl: String
+})
+
+const router = useRouter()
+
+const onClickRedirect = () => {
+    router.push(`/plant/${props.id}`)
+}
+
+const addFavorite = () => {
+    fetch(`http://127.0.0.1:8000/favorites/?plant_id=${props.id}`, {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('jwt')}`
+        }
+    })
+}
 </script>
 
 <template>
     <div class="card">
         <div class="card-top">
-            <img class="card-img" src="../assets/bg.jpg" alt="">
-            <IconFavorite class="card-favorite" />
+            <img @click="onClickRedirect" class="card-img" :src="imageUrl" alt="no img">
+            <IconFavorite v-if="isLogged" @click="addFavorite" class="card-favorite" />
         </div>
-        <div class="card-bot">
-            <span class="card-title">Фикус</span>
-            <span class="card-desc">Популярное комнатное растение с красивыми зелеными листьями.</span>
+        <div @click="onClickRedirect" class="card-bot">
+            <span class="card-title">{{ title }}</span>
+            <span class="card-desc">{{ desc }}</span>
             <div class="card-rating-price">
-                <span class="card-rating">⭐4.5</span>
-                <span class="card-price">1200₽</span>
+                <span v-if="rating" class="card-rating">⭐{{ rating }}</span>
+                <span v-else class="card-rating">⭐-</span>
+                <span class="card-price">{{ price }}₽</span>
             </div>
-            <span class="card-seller">Green Shop</span>
+            <span class="card-seller">{{ seller }}</span>
         </div>
     </div>
 </template>
@@ -27,6 +58,7 @@ import IconFavorite from './icons/IconFavorite.vue';
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    cursor: pointer;
 }
 
 .card-img {
@@ -34,6 +66,8 @@ import IconFavorite from './icons/IconFavorite.vue';
     height: 220px;
     border-radius: 10px;
     opacity: 0.9;
+    color: white;
+
 }
 
 .card-img:hover {
@@ -50,6 +84,7 @@ import IconFavorite from './icons/IconFavorite.vue';
     top: 10px;
     right: 10px;
     cursor: pointer;
+    z-index: 100;
 }
 
 .card-bot {

@@ -1,6 +1,5 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router';
-
+import { RouterView } from 'vue-router';
 </script>
 
 <template>
@@ -21,17 +20,9 @@ body{
   --font-tetriary: #AFAEAD;
   --primary: #3A5743;
   --rating: #FFA500;
-}
 
-/* nav a.router-link-exact-active {
-  color: var(--color-text);
 }
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
+input:focus {
+  outline: var(--primary) solid 2px;
 }
-
-nav a:first-of-type {
-  border: 0;
-} */
 </style>

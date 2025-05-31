@@ -1,9 +1,23 @@
+<script setup>
+import { watch } from 'vue';
+import { useRoute } from 'vue-router';
+import { useStore } from 'vuex';
+
+const store = useStore()
+const route = useRoute()
+
+watch(route, () => {
+    store.state.category = route.params.category
+})
+
+</script>
+
 <template>
     <div class="nav">
-        <RouterLink to="">Все</RouterLink>
-        <RouterLink to="veg">Овощи</RouterLink>
-        <RouterLink to="fru">Фрукты</RouterLink>
-        <RouterLink to="flo">Цветы</RouterLink>
+        <RouterLink to="all">Все</RouterLink>
+        <RouterLink to="vegetables">Овощи</RouterLink>
+        <RouterLink to="fruits">Фрукты</RouterLink>
+        <RouterLink to="flowers">Цветы</RouterLink>
     </div>
 </template>
 
